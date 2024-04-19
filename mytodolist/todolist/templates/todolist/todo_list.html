@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <style>
+        .completed {
+            text-decoration: line-through;
+        }
+        form {
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .todo-item {
+            display: flex;
+            align-items: center;
+        }
+        .todo-text { /* 항목의 텍스트에 적용되는 스타일 */
+            flex-grow: 1; /* 텍스트가 버튼 이전까지만 확장되도록 함 */
+            vertical-align: middle; /* 버튼과 텍스트를 수직 정렬 */
+        }
+    </style>
+</head>
+<body>
+    <h1>To-do List</h1>
+    <ul>
+        {% for todo in todos %}
+            <li class="{% if todo.completed %}completed{% endif %}">
+                <div class="todo-item">
+                    <span class="todo-text">{{ todo.todo }} - {{ todo.content }}</span>
+                    <form action="{% url 'complete_todo' todo.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit">
+                            {% if todo.completed %}취소{% else %}완료{% endif %}
+                        </button>
+                    </form>
+                    <form action="{% url 'delete_todo' todo.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit">삭제</button>
+                    </form>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'add_todo' %}">할 일 추가</a>
+</body>
+</html>
