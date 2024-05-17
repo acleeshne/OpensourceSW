@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>할 일 추가</title>
+</head>
+<body>
+    <h1>할 일 추가</h1>
+    <!-- 할 일 추가 폼 -->
+    <form action="{% url 'add_todo' %}" method="post">
+        {% csrf_token %}
+        <!-- 할 일 입력 필드 -->
+        <label for="todo">할 일:</label>
+        <input type="text" id="todo" name="todo" required><br>
+        <!-- 내용 입력 필드 -->
+        <label for="content">내용:</label><br>
+        <textarea id="content" name="content"></textarea><br>
+        <!-- 추가 버튼 -->
+        <button type="submit">추가</button>
+    </form>
+    <!-- 할 일 목록 페이지로 돌아가는 링크 -->
+    <a href="{% url 'todo_list' %}">목록</a>
+</body>
+</html>
