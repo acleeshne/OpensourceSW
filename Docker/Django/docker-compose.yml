@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  # Django 웹 애플리케이션 서비스
+  web:
+    build: .  # 현재 디렉토리에 있는 Dockerfile을 사용하여 이미지를 빌드
+    command: python manage.py runserver 0.0.0.0:8000  # 컨테이너가 시작될 때 실행할 명령어
+    volumes:
+      - .:/app  # 현재 디렉토리를 컨테이너의 /app 디렉토리로 마운트하여 소스 코드 변경을 실시간으로 반영
+    ports:
+      - "8000:8000"  # 로컬 포트 8000을 컨테이너의 포트 8000으로 매핑
+    environment:
+      - DJANGO_SETTINGS_MODULE=mytodolist.settings  # Django 설정 파일 지정
+    depends_on:
+      - db  # 데이터베이스 서비스에 의존
+
+  # PostgreSQL 데이터베이스 서비스
+  db:
+    image: postgres:13  # PostgreSQL 13 버전의 이미지 사용
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # 데이터베이스 데이터를 저장할 볼륨 마운트
+    environment:
+      POSTGRES_DB: mytodolist  # PostgreSQL 데이터베이스 이름 설정
+      POSTGRES_USER: mytodolistuser  # PostgreSQL 사용자 이름 설정
+      POSTGRES_PASSWORD: password  # PostgreSQL 사용자 비밀번호 설정
+
+# Docker 볼륨 정의
+volumes:
+  postgres_data:  # PostgreSQL 데이터베이스 데이터를 저장할 Docker 볼륨
